@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://leatech.co.il/sitemap.xml
