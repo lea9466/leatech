@@ -25,9 +25,9 @@ export function ScrollRobot() {
       ticking = false;
       const rect = node.getBoundingClientRect();
       const vh = window.innerHeight;
-      const start = vh * 0.85;
-      const end = vh * 0.15;
-      setProgress(remap(start - rect.top, 0, start - end));
+      // 0 כשראש האלמנט בתחתית המסך (עוד לא נראה), 1 כשהוא עבר לגמרי
+      // למעלה — טווח גלילה מלא כדי שההליכה תהיה מספיק ארוכה להבחין בה.
+      setProgress(remap(vh - rect.top, 0, vh + rect.height));
     };
     const onScroll = () => {
       if (ticking) return;
@@ -44,9 +44,9 @@ export function ScrollRobot() {
     };
   }, [reducedMotion]);
 
-  const walk = remap(progress, 0, 0.5);
-  const arm = remap(progress, 0.45, 0.7);
-  const lit = remap(progress, 0.68, 1);
+  const walk = remap(progress, 0.08, 0.58);
+  const arm = remap(progress, 0.52, 0.74);
+  const lit = remap(progress, 0.7, 0.92);
   const walking = walk > 0.02 && walk < 0.98;
 
   const style = reducedMotion

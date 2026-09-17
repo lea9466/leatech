@@ -1,21 +1,24 @@
 .section {
   padding-inline: var(--page-padding-inline);
+  margin-block-start: calc(-1 * var(--space-16));
+  position: relative;
+  z-index: 1;
 }
 
 .container {
   position: relative;
   max-width: var(--container-width);
-  height: 150px;
+  height: 160px;
   margin-inline: auto;
   overflow: hidden;
 }
 
 .figure {
   position: absolute;
-  top: 6px;
+  top: 10px;
   left: 0;
-  width: 130px;
-  transform: translateX(calc((var(--walk, 1) - 1) * 260%));
+  width: 140px;
+  transform: translateX(calc((var(--walk, 1) - 1) * 320%));
 }
 
 .svg {
@@ -26,11 +29,37 @@
 
 @keyframes robot-bob {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+  50% { transform: translateY(-4px); }
 }
 
 .figure[data-walking] {
-  animation: robot-bob 420ms ease-in-out infinite;
+  animation: robot-bob 340ms ease-in-out infinite;
+}
+
+@keyframes leg-swing-a {
+  0%, 100% { transform: rotate(22deg); }
+  50% { transform: rotate(-22deg); }
+}
+
+@keyframes leg-swing-b {
+  0%, 100% { transform: rotate(-22deg); }
+  50% { transform: rotate(22deg); }
+}
+
+.leg1 {
+  transform-origin: 62px 119px;
+}
+
+.leg2 {
+  transform-origin: 98px 119px;
+}
+
+.figure[data-walking] .leg1 {
+  animation: leg-swing-a 340ms ease-in-out infinite;
+}
+
+.figure[data-walking] .leg2 {
+  animation: leg-swing-b 340ms ease-in-out infinite;
 }
 
 .body,
@@ -108,12 +137,16 @@
 }
 
 @media (max-width: 640px) {
+  .section {
+    margin-block-start: calc(-1 * var(--space-12));
+  }
+
   .container {
-    height: 110px;
+    height: 120px;
   }
 
   .figure {
-    width: 92px;
+    width: 100px;
   }
 }
 
