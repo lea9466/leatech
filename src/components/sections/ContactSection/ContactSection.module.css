@@ -1,0 +1,93 @@
+.section {
+  padding: var(--space-24) var(--page-padding-inline) 0;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: var(--space-12);
+  align-items: start;
+  max-width: var(--container-width);
+  margin-inline: auto;
+}
+
+.intro {
+  position: sticky;
+  inset-block-start: calc(var(--navbar-height) + var(--space-8));
+}
+
+.direct {
+  color: var(--color-text-muted);
+}
+
+.direct a {
+  color: var(--color-glacier);
+  text-underline-offset: 0.25em;
+}
+
+.card {
+  padding: var(--space-8);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6);
+}
+
+.honeypot {
+  position: absolute;
+  inset-inline-start: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.status {
+  flex: 1;
+  min-width: 14rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.statusSuccess {
+  color: var(--color-success);
+}
+
+.statusError {
+  color: var(--color-danger);
+}
+
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .intro {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: var(--space-6);
+  }
+}

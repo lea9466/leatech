@@ -1,0 +1,206 @@
+/* =========================================================
+   Hero — קנבס כהה, זוהר מאופק, נקודת מוקד אחת (ר' אפיון סעיף 07)
+   ========================================================= */
+
+.hero {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-height: min(88svh, 760px);
+  padding: calc(var(--navbar-height) + var(--space-12)) var(--page-padding-inline) var(--space-24);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.grid {
+  width: 100%;
+  max-width: var(--container-width);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: center;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: start;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-block-end: var(--space-8);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  animation: fade-rise 1000ms var(--ease-out) both;
+  animation-delay: 100ms;
+}
+
+.pulse {
+  position: relative;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-success);
+  flex-shrink: 0;
+}
+
+.pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: pulse-ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  max-width: 15ch;
+  font-family: var(--font-display);
+  font-size: var(--text-hero);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.title > span {
+  display: block;
+  opacity: 0;
+  animation: fade-rise 1050ms var(--ease-out) forwards;
+}
+
+.titleLine {
+  color: var(--color-text);
+  animation-delay: 260ms;
+}
+
+.titleAccent {
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-block-end: 0.08em;
+  animation-delay: 460ms;
+}
+
+.subheadline {
+  max-width: 36rem;
+  margin-block-start: var(--space-8);
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  opacity: 0;
+  animation: fade-rise 1050ms var(--ease-out) forwards;
+  animation-delay: 660ms;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-block-start: var(--space-12);
+  opacity: 0;
+  animation: fade-rise 1050ms var(--ease-out) forwards;
+  animation-delay: 860ms;
+}
+
+.ghostButton {
+  border-color: var(--glass-border-hover);
+  color: var(--color-text);
+}
+
+.ghostButton:hover {
+  background: var(--glass-bg);
+  border-color: var(--color-text-muted);
+}
+
+.visual {
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+@keyframes pulse-ping {
+  0% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+  75%,
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+/* ---------- רספונסיבי ---------- */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  .copy {
+    align-items: flex-start;
+  }
+
+  .title {
+    max-width: none;
+  }
+
+  .visual {
+    order: -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    min-height: auto;
+    padding-block-start: calc(var(--navbar-height) + var(--space-12));
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+}
+
+/* ---------- הפחתת תנועה ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow,
+  .title > span,
+  .subheadline,
+  .actions {
+    animation: none;
+    opacity: 1;
+  }
+
+  .pulse::after {
+    animation: none;
+    opacity: 0;
+  }
+}

@@ -1,0 +1,29 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+}
+
+.main:focus {
+  outline: none;
+}
+
+.skipLink {
+  position: fixed;
+  inset-block-start: var(--space-4);
+  inset-inline-start: var(--space-4);
+  z-index: 100;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-text);
+  color: var(--color-night);
+  border-radius: var(--radius-sm);
+  transform: translateY(-200%);
+}
+
+.skipLink:focus {
+  transform: none;
+}
