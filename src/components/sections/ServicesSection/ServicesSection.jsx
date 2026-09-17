@@ -24,15 +24,17 @@ export function ServicesSection() {
   return (
     <section id={SECTION_IDS.services} className={styles.section} aria-labelledby={HEADING_ID}>
       <div className={styles.container}>
-        <SectionHeader
-          id={HEADING_ID}
-          eyebrow="שירותים"
-          title="במה אפשר לעזור"
-          description="מאתר ראשון ועד מערכת שמריצה את העסק – כל פרויקט נבנה סביב איך שאת באמת עובדת."
-          gradient
-        />
+        <div className={styles.headerRow}>
+          <SectionHeader
+            id={HEADING_ID}
+            eyebrow="שירותים"
+            title="במה אפשר לעזור"
+            description="מאתר ראשון ועד מערכת שמריצה את העסק – כל פרויקט נבנה סביב איך שאת באמת עובדת."
+            gradient
+          />
 
-        <ScrollRobot />
+          <ScrollRobot />
+        </div>
 
         <ul ref={gridRef} className={cn(styles.grid, gridInView && styles.revealed)}>
           {content.services.map(({ id, title, text }) => {

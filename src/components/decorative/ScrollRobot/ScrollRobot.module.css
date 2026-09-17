@@ -1,14 +1,11 @@
 .section {
-  position: relative;
-  z-index: 1;
-  margin-block-end: calc(-1 * var(--space-6));
+  flex-shrink: 0;
 }
 
 .container {
   position: relative;
-  max-width: var(--container-width);
+  width: 140px;
   height: 160px;
-  margin-inline: auto;
   overflow: hidden;
 }
 
@@ -136,11 +133,8 @@
 }
 
 @media (max-width: 640px) {
-  .section {
-    margin-block-end: calc(-1 * var(--space-4));
-  }
-
   .container {
+    width: 100px;
     height: 120px;
   }
 
