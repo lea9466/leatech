@@ -1,0 +1,141 @@
+.section {
+  padding-inline: var(--page-padding-inline);
+}
+
+.container {
+  position: relative;
+  max-width: var(--container-width);
+  height: 150px;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.figure {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 130px;
+  transform: translateX(calc((var(--walk, 1) - 1) * 260%));
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+@keyframes robot-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.figure[data-walking] {
+  animation: robot-bob 420ms ease-in-out infinite;
+}
+
+.body,
+.head,
+.lanternBody {
+  fill: var(--bg-raised-2);
+  stroke: var(--line-hover);
+  stroke-width: 1.5;
+}
+
+.leg1,
+.leg2 {
+  fill: var(--bg-raised-2);
+  stroke: var(--line-hover);
+  stroke-width: 1.5;
+}
+
+.eye {
+  fill: var(--accent);
+}
+
+.antennaStem {
+  stroke: var(--line-hover);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.antennaTip {
+  fill: var(--accent-2);
+}
+
+.armBack {
+  fill: none;
+  stroke: var(--bg-raised-2);
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.armFront {
+  transform-origin: 98px 76px;
+  transform: rotate(calc((1 - var(--arm, 1)) * 108deg));
+}
+
+.armFrontPath {
+  fill: none;
+  stroke: var(--bg-raised-2);
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.lanternHandle {
+  fill: none;
+  stroke: var(--line-hover);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lanternHalo {
+  fill: var(--accent);
+  opacity: calc(var(--lit, 0) * 0.85);
+  filter: blur(7px);
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(calc(0.65 + var(--lit, 0) * 0.6));
+}
+
+.lanternBulb {
+  fill: var(--ink-muted);
+}
+
+.lanternBulbLit {
+  fill: var(--accent);
+  opacity: var(--lit, 0);
+}
+
+@media (max-width: 640px) {
+  .container {
+    height: 110px;
+  }
+
+  .figure {
+    width: 92px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .container {
+    height: 130px;
+  }
+
+  .figure {
+    transform: none;
+  }
+
+  .armFront {
+    transform: rotate(0deg);
+  }
+
+  .lanternHalo {
+    opacity: 0.85;
+    transform: scale(1.1);
+  }
+
+  .lanternBulbLit {
+    opacity: 1;
+  }
+}
