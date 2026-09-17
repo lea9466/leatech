@@ -4,6 +4,7 @@ import { GlassCard } from '../../ui/GlassCard';
 import { SectionHeader } from '../../ui/SectionHeader';
 import { cn } from '../../../utils/cn';
 import { useInView } from '../../../hooks/useInView';
+import { ScrollRobot } from '../../decorative/ScrollRobot';
 import { SERVICE_ICONS, BEFORE_ICON_SETS, ArrowIcon } from './ServiceIcons';
 import styles from './ServicesSection.module.css';
 
@@ -30,6 +31,8 @@ export function ServicesSection() {
           description="מאתר ראשון ועד מערכת שמריצה את העסק – כל פרויקט נבנה סביב איך שאת באמת עובדת."
           gradient
         />
+
+        <ScrollRobot />
 
         <ul ref={gridRef} className={cn(styles.grid, gridInView && styles.revealed)}>
           {content.services.map(({ id, title, text }) => {
