@@ -107,10 +107,10 @@
       "tag": "אתר SaaS",
       "link": null,
       "images": [
-        "/images/projects/stg-1.jpg",
-        "/images/projects/stg-2.jpg",
-        "/images/projects/stg-3.jpg",
-        "/images/projects/stg-4.jpg"
+        "/images/stg/platform-home.webp",
+        "/images/stg/platform-live-preview.webp",
+        "/images/stg/dashboard-overview.webp",
+        "/images/stg/dashboard-galleries.webp"
       ],
       "detail": {
         "description": "שני מוצרים בפלטפורמה אחת: אתר תדמית ציבורי לצלם שמופיע בגוגל, וניהול גלריות פרטיות לבחירת תמונות מול לקוחות — כל אחד עם מסלול משלו, ואפשר להשתמש בכל אחד בנפרד או בשניהם יחד. נבנתה עם Next.js ו-Supabase, ואחסון מדיה ב-Cloudflare R2.",
@@ -138,10 +138,10 @@
       "tag": "אתר תדמית",
       "link": "https://yaelifestyle.co.il/",
       "images": [
-        "/images/projects/yael-site-1.jpg",
-        "/images/projects/yael-site-2.jpg",
-        "/images/projects/yael-site-3.jpg",
-        "/images/projects/yael-site-4.jpg"
+        "/images/yael/yael-home-desktop.webp",
+        "/images/yael/yael-recipes-desktop.webp",
+        "/images/yael/yael-services-desktop.webp",
+        "/images/yael/yael-home-mobile.webp"
       ],
       "detail": {
         "description": "אתר תוכן חם ומלא חיים למאמנת תזונה, עם מערכת ניהול פשוטה שהיא מפעילה לבד — מתכונים, מאמרים, שירותים, המלצות ותעודות מתעדכנים בכמה קליקים, בלי טכנאי ובלי קוד.",
