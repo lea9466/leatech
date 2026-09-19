@@ -29,7 +29,7 @@ export function ServicesSection() {
             id={HEADING_ID}
             eyebrow="שירותים"
             title="במה אפשר לעזור"
-            description="מאתר ראשון ועד מערכת שמריצה את העסק – כל פרויקט נבנה סביב איך שאת באמת עובדת."
+            description="מאתר ראשון ועד מערכת שמריצה את העסק – כל פרויקט נבנה סביב איך שאתם באמת עובדים."
             gradient
           />
 
