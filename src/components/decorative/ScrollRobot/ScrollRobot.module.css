@@ -4,42 +4,59 @@
 
 .container {
   position: relative;
-  width: 140px;
-  height: 160px;
-  overflow: hidden;
+  width: 420px;
+  height: 215px;
+  /* בלי חיתוך: הקונטיינר הזה כבר בפנים הריפוד של העמוד (לא צמוד
+     לקצה המסך האמיתי), אז כדי שהרובוט ייכנס ממש מהמסגרת של המסך
+     הוא צריך לחצות את רצועת הריפוד בלי שתחתוך אותו — ר' start
+     ב-keyframes למטה שמחושב ביחס לרוחב המסך (vw), לא ביחס
+     לקונטיינר. הגלישה האופקית עצמה כבר חסומה גלובלית (overflow-x
+     על html/body). */
+  overflow: visible;
 }
 
 .figure {
   position: absolute;
-  top: 10px;
+  top: 12px;
   left: 0;
-  width: 140px;
-  transform: translateX(calc((var(--walk, 1) - 1) * 320%));
+  width: 190px;
+  /* translate (לא transform) בכוונה: אנימציית ה-bob למטה מפעילה
+     transform:translateY משלה על אותו אלמנט, וכל אנימציית CSS
+     מחליפה את כל הערך של transform ולא מתחברת אליו — אם מיקום
+     ההליכה גם הוא היה על transform הוא היה נמחק בדיוק בזמן ההליכה.
+     מתחיל מעבר לקצה השמאלי של המסך עצמו (לא רק של הקונטיינר) ועד
+     0 — קצה הקונטיינר שכבר מיושר לתחילת הכרטיס הראשון (משמאל) בגריד
+     השירותים, כי שניהם צמודים לאותו קצה שמאלי של אותו container. */
+  translate: calc(-190px - 10vw) 0;
+}
+
+/* אנימציה חד-פעמית על ציר זמן משלה, לא תלוית גלילה: ברגע שנכנסת
+   לתצוגה (ר' useInView ב-JSX) היא רצה עד הסוף גם אם מפסיקים לגלול,
+   ונשארת במצב הסופי (forwards) בלי לחזור אחורה. */
+.figure.play {
+  animation: robot-walk-in 4000ms var(--ease-out) forwards,
+    robot-bob-walk 4000ms ease-in-out forwards;
+}
+
+@keyframes robot-walk-in {
+  from { translate: calc(-190px - 10vw) 0; }
+  to { translate: 0 0; }
+}
+
+@keyframes robot-bob-walk {
+  0%, 100% { transform: translateY(0); }
+  15% { transform: translateY(-5px); }
+  30% { transform: translateY(0); }
+  45% { transform: translateY(-5px); }
+  60% { transform: translateY(0); }
+  75% { transform: translateY(-3px); }
+  90% { transform: translateY(0); }
 }
 
 .svg {
   width: 100%;
   height: auto;
   overflow: visible;
-}
-
-@keyframes robot-bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-}
-
-.figure[data-walking] {
-  animation: robot-bob 340ms ease-in-out infinite;
-}
-
-@keyframes leg-swing-a {
-  0%, 100% { transform: rotate(22deg); }
-  50% { transform: rotate(-22deg); }
-}
-
-@keyframes leg-swing-b {
-  0%, 100% { transform: rotate(-22deg); }
-  50% { transform: rotate(22deg); }
 }
 
 .leg1 {
@@ -50,12 +67,34 @@
   transform-origin: 98px 119px;
 }
 
-.figure[data-walking] .leg1 {
-  animation: leg-swing-a 340ms ease-in-out infinite;
+.figure.play .leg1 {
+  animation: leg-walk-a 4000ms ease-in-out forwards;
 }
 
-.figure[data-walking] .leg2 {
-  animation: leg-swing-b 340ms ease-in-out infinite;
+.figure.play .leg2 {
+  animation: leg-walk-b 4000ms ease-in-out forwards;
+}
+
+@keyframes leg-walk-a {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(20deg); }
+  25% { transform: rotate(-20deg); }
+  40% { transform: rotate(20deg); }
+  55% { transform: rotate(-20deg); }
+  70% { transform: rotate(14deg); }
+  85% { transform: rotate(-8deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes leg-walk-b {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(-20deg); }
+  25% { transform: rotate(20deg); }
+  40% { transform: rotate(-20deg); }
+  55% { transform: rotate(20deg); }
+  70% { transform: rotate(-14deg); }
+  85% { transform: rotate(8deg); }
+  100% { transform: rotate(0deg); }
 }
 
 .body,
@@ -96,7 +135,16 @@
 
 .armFront {
   transform-origin: 98px 76px;
-  transform: rotate(calc((1 - var(--arm, 1)) * 108deg));
+  transform: rotate(108deg);
+}
+
+.figure.play .armFront {
+  animation: arm-raise 700ms var(--ease-out) 3200ms forwards;
+}
+
+@keyframes arm-raise {
+  from { transform: rotate(108deg); }
+  to { transform: rotate(0deg); }
 }
 
 .armFrontPath {
@@ -116,11 +164,20 @@
 
 .lanternHalo {
   fill: var(--accent);
-  opacity: calc(var(--lit, 0) * 0.85);
   filter: blur(7px);
   transform-box: fill-box;
   transform-origin: center;
-  transform: scale(calc(0.65 + var(--lit, 0) * 0.6));
+  opacity: 0;
+  transform: scale(0.65);
+}
+
+.figure.play .lanternHalo {
+  animation: halo-in 600ms var(--ease-out) 3750ms forwards;
+}
+
+@keyframes halo-in {
+  from { opacity: 0; transform: scale(0.65); }
+  to { opacity: 0.85; transform: scale(1.25); }
 }
 
 .lanternBulb {
@@ -129,39 +186,81 @@
 
 .lanternBulbLit {
   fill: var(--accent);
-  opacity: var(--lit, 0);
+  opacity: 0;
 }
 
-@media (max-width: 640px) {
+.figure.play .lanternBulbLit {
+  animation: bulb-in 600ms var(--ease-out) 3750ms forwards;
+}
+
+@keyframes bulb-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* מובייל/טאבלט: הרובוט צועד מקצה המסך השמאלי ועוצר צמוד לקצה הימני,
+   באותו קו עם הכותרת שמעליו (בעמודה הכותרת מיושרת לימין). ה-right
+   השלילי מקזז את הרווח הריק בצד ימין של ה-viewBox, כדי שהפנס עצמו
+   (החלק הימני הבולט של הדמות) הוא זה שנוגע בקצה. */
+@media (max-width: 900px) {
+  .section {
+    align-self: stretch;
+  }
+
   .container {
-    width: 100px;
-    height: 120px;
+    width: 100%;
+    height: 145px;
+    overflow: visible;
   }
 
   .figure {
-    width: 100px;
+    width: 130px;
+    left: auto;
+    right: -32px;
+    translate: calc(-100vw - 20px) 0;
+  }
+
+  @keyframes robot-walk-in {
+    from { translate: calc(-100vw - 20px) 0; }
+    to { translate: 0 0; }
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .container {
-    height: 130px;
+    height: 180px;
   }
 
   .figure {
-    transform: none;
+    translate: 0 0;
+    animation: none;
+  }
+
+  .figure .leg1,
+  .figure .leg2 {
+    animation: none;
+    transform: rotate(0deg);
   }
 
   .armFront {
     transform: rotate(0deg);
+    animation: none;
   }
 
   .lanternHalo {
     opacity: 0.85;
-    transform: scale(1.1);
+    transform: scale(1.25);
+    animation: none;
   }
 
   .lanternBulbLit {
     opacity: 1;
+    animation: none;
+  }
+}
+
+@media (max-width: 900px) and (prefers-reduced-motion: reduce) {
+  .figure {
+    translate: 0 0;
   }
 }

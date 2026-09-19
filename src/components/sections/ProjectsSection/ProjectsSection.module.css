@@ -18,15 +18,16 @@
 /* ---------- בלוק פרויקט מלא-רוחב, בתוך מסגרת עגולה אחת ---------- */
 .showcase {
   display: grid;
-  grid-template-columns: 1fr 1.05fr;
-  gap: var(--space-16);
-  align-items: center;
-  padding: var(--space-8);
+  grid-template-columns: 1.1fr 1.3fr;
+  gap: var(--space-12);
+  align-items: stretch;
+  padding: var(--space-6);
   border-radius: calc(var(--radius-lg) * 1.6);
   border: 1px solid var(--glass-border);
   background: linear-gradient(155deg, var(--bg-raised-2), var(--bg-raised) 65%);
   opacity: 0;
-  transform: translateY(1.5rem);
+  transform: translateY(3.5rem) scale(0.94);
+  transition: opacity 1200ms var(--ease-out), transform 1200ms var(--ease-out);
 }
 
 @media (max-width: 600px) {
@@ -35,22 +36,14 @@
   }
 }
 
+/* דו-כיווני בכוונה (לא אנימציית "בנייה" חד-פעמית): הכרטיס נכנס
+   כשגוללים אליו ונעלם כשגוללים חזרה למעלה, ר' useInViewToggle. */
 .showcaseIn {
-  animation: showcase-in 750ms var(--ease-out) both;
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
-@keyframes showcase-in {
-  from {
-    opacity: 0;
-    transform: translateY(1.5rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .showcase {
     grid-template-columns: 1fr;
     gap: var(--space-8);
@@ -58,6 +51,15 @@
 
   .visual {
     order: -1;
+    height: auto;
+    width: 100%;
+    max-width: 44rem;
+    justify-self: center;
+  }
+
+  .scrollFrame {
+    height: auto;
+    aspect-ratio: 16 / 10;
   }
 }
 
@@ -65,7 +67,7 @@
   .showcase {
     opacity: 1;
     transform: none;
-    animation: none;
+    transition: none;
   }
 }
 
@@ -73,10 +75,15 @@
 .visual {
   position: relative;
   padding: var(--space-2);
+  /* פריט גריד שנמתח (align-items: stretch ב-.showcase) — התמונה
+     ממלאת את הגובה המלא של הכרטיס, מהתחלת הכיתוב ועד סופו, לא
+     נשארת בגובה קבוע לפי יחס-רוחב קבוע. */
+  height: 100%;
 }
 
 .scrollPanel {
   position: relative;
+  height: 100%;
   border-radius: var(--radius-lg);
   border: 1px solid var(--glass-border);
   background: var(--bg-raised-2);
@@ -86,7 +93,7 @@
 
 .scrollFrame {
   position: relative;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   background: var(--color-night);
   overflow: hidden;
 }
@@ -155,6 +162,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   gap: var(--space-3);
 }
 
@@ -169,7 +177,8 @@
 }
 
 .title {
-  font-size: var(--text-2xl);
+  font-size: clamp(1.625rem, 2.4vw, 2.125rem);
+  line-height: 1.25;
   font-weight: 800;
   letter-spacing: -0.01em;
 }
@@ -177,7 +186,7 @@
 .summary {
   color: var(--color-text-muted);
   line-height: 1.7;
-  max-width: 34rem;
+  max-width: 40rem;
 }
 
 /* ---------- הדגשה מצוטטת ---------- */
@@ -188,7 +197,7 @@
   margin-block: var(--space-2);
   padding-inline-start: var(--space-4);
   border-inline-start: 2px solid var(--color-glacier);
-  max-width: 34rem;
+  max-width: 40rem;
 }
 
 .quoteMark {
@@ -231,7 +240,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  max-width: 34rem;
+  max-width: 40rem;
 }
 
 .secondaryItem {

@@ -1,7 +1,7 @@
-import { SERVICES } from './services';
+import content from '../data/site-content.json';
 
 export const PROJECT_TYPE_OPTIONS = Object.freeze([
-  ...SERVICES.map(({ id, title }) => ({ value: id, label: title })),
+  ...content.services.map(({ id, title }) => ({ value: id, label: title })),
   { value: 'other', label: 'משהו אחר' },
 ]);
 

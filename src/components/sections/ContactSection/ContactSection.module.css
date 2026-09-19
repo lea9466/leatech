@@ -9,36 +9,417 @@
   align-items: start;
   max-width: var(--container-width);
   margin-inline: auto;
+  opacity: 0;
+  transform: translateY(2rem);
+  transition: opacity 900ms var(--ease-out), transform 900ms var(--ease-out);
+}
+
+.reveal {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .intro {
   position: sticky;
   inset-block-start: calc(var(--navbar-height) + var(--space-8));
-}
-
-.direct {
-  color: var(--color-text-muted);
-}
-
-.direct a {
-  color: var(--color-glacier);
-  text-underline-offset: 0.25em;
-}
-
-.card {
-  padding: var(--space-8);
-}
-
-.form {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
 }
 
-.row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-6);
+/* start לוגי = ימין ב-RTL: הרובוט מיושר לאותו קצה כמו הטקסט */
+.robot {
+  align-self: flex-start;
+}
+
+/* ---------- מייל / וואטסאפ מהירים ---------- */
+.quickContact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.quickLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color var(--duration) var(--ease-out), background-color var(--duration) var(--ease-out);
+}
+
+.quickLink:hover {
+  border-color: var(--glass-border-hover);
+  background: var(--bg-raised-2);
+}
+
+.quickIcon {
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--color-glacier);
+  flex-shrink: 0;
+}
+
+/* ---------- כרטיס הצ'אט + הילה ---------- */
+.cardWrap {
+  position: relative;
+}
+
+.glow {
+  position: absolute;
+  inset: -12%;
+  background: radial-gradient(circle at 70% 20%, var(--glow), transparent 65%);
+  filter: blur(40px);
+  z-index: -1;
+}
+
+.chatCard {
+  display: flex;
+  flex-direction: column;
+  height: 32rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.chatLog {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  scrollbar-width: thin;
+}
+
+.bubbleRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  max-width: 85%;
+}
+
+.bubbleRowBot {
+  align-self: flex-start;
+}
+
+.bubbleRowUser {
+  align-self: flex-end;
+}
+
+.avatar {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.botHead {
+  fill: var(--bg-raised-2);
+  stroke: var(--line-hover);
+  stroke-width: 1.5;
+}
+
+.botEye {
+  fill: var(--accent);
+}
+
+.botStem {
+  stroke: var(--line-hover);
+  stroke-width: 2;
+}
+
+.botTip {
+  fill: var(--accent-2);
+}
+
+.bubble {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  animation: bubble-in 320ms var(--ease-out) both;
+}
+
+@keyframes bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.bubbleBot {
+  background: var(--bg-raised-2);
+  border: 1px solid var(--glass-border);
+  border-start-start-radius: var(--space-1);
+  color: var(--color-text);
+}
+
+.bubbleUser {
+  background: var(--gradient-accent);
+  color: var(--color-text-dark);
+  border-end-end-radius: var(--space-1);
+  font-weight: 600;
+}
+
+/* ---------- כרטיס סיכום לעריכה ישירה לפני שליחה ---------- */
+.reviewCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised-2);
+  border: 1px solid var(--glass-border);
+  animation: bubble-in 320ms var(--ease-out) both;
+}
+
+.reviewField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.reviewLabel {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.reviewField input,
+.reviewField select,
+.reviewField textarea {
+  width: 100%;
+  background: var(--bg-raised);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  padding: var(--space-2) var(--space-3);
+  font-family: inherit;
+  font-size: var(--text-base);
+  resize: vertical;
+  transition: border-color var(--duration) var(--ease-out);
+}
+
+.reviewField select option {
+  background: var(--bg-raised);
+}
+
+.reviewField input:focus-visible,
+.reviewField select:focus-visible,
+.reviewField textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-glacier);
+  box-shadow: 0 0 0 3px rgba(0, 220, 230, 0.15);
+}
+
+.bubbleSuccess {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-success);
+}
+
+.bubbleError {
+  color: var(--color-danger);
+}
+
+.successIcon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
+  animation: status-pop 420ms var(--ease-out) both;
+}
+
+@keyframes status-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------- "מקליד/ה…" ---------- */
+.typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  border-start-start-radius: var(--space-1);
+  background: var(--bg-raised-2);
+  border: 1px solid var(--glass-border);
+}
+
+.typing span {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--ink-muted);
+  animation: typing-bounce 1200ms ease-in-out infinite;
+}
+
+.typing span:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+.typing span:nth-child(3) {
+  animation-delay: 300ms;
+}
+
+@keyframes typing-bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+/* ---------- אזור הקלדה ---------- */
+.composer {
+  border-block-start: 1px solid var(--glass-border);
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  animation: bubble-in 320ms var(--ease-out) both;
+}
+
+.composerRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.composerRow input,
+.composerRow textarea {
+  flex: 1;
+  background: var(--bg-raised-2);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  padding: var(--space-3) var(--space-4);
+  font-family: inherit;
+  font-size: var(--text-base);
+  resize: none;
+  transition: border-color var(--duration) var(--ease-out);
+}
+
+.composerRow input:focus-visible,
+.composerRow textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-glacier);
+  box-shadow: 0 0 0 3px rgba(0, 220, 230, 0.15);
+}
+
+.sendStep {
+  flex-shrink: 0;
+  width: 2.875rem;
+  height: 2.875rem;
+  border: none;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  color: var(--color-text-dark);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out);
+}
+
+.sendStep svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.sendStep:hover {
+  box-shadow: 0 10px 24px -10px var(--glow);
+}
+
+.sendStep:active {
+  transform: scale(0.94);
+}
+
+.sendFinal {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.875rem;
+  padding: var(--space-2) var(--space-6);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-accent);
+  color: var(--color-text-dark);
+  font-weight: 600;
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: box-shadow var(--duration) var(--ease-out), transform var(--duration) var(--ease-out);
+}
+
+.sendFinal svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.sendFinal:hover:not(:disabled) {
+  box-shadow: 0 10px 30px -12px var(--glow);
+}
+
+.sendFinal:active {
+  transform: translateY(1px);
+}
+
+.sendFinal:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.chip {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--bg-raised-2);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--duration) var(--ease-out), background-color var(--duration) var(--ease-out), transform var(--duration) var(--ease-out);
+}
+
+.chip:hover {
+  border-color: var(--color-glacier);
+  background: var(--bg-raised);
+  transform: translateY(-1px);
+}
+
+.fieldError {
+  margin: var(--space-2) 0 0;
+  color: var(--color-danger);
+  font-size: var(--text-sm);
 }
 
 .honeypot {
@@ -47,28 +428,6 @@
   width: 1px;
   height: 1px;
   overflow: hidden;
-}
-
-.footer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.status {
-  flex: 1;
-  min-width: 14rem;
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-}
-
-.statusSuccess {
-  color: var(--color-success);
-}
-
-.statusError {
-  color: var(--color-danger);
 }
 
 @media (max-width: 900px) {
@@ -80,14 +439,38 @@
   .intro {
     position: static;
   }
+
+  .chatCard {
+    height: 28rem;
+  }
 }
 
 @media (max-width: 560px) {
-  .row {
-    grid-template-columns: 1fr;
+  .bubbleRow {
+    max-width: 95%;
   }
 
-  .card {
-    padding: var(--space-6);
+  .reviewCard {
+    padding: var(--space-3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .container {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .bubble,
+  .composer,
+  .reviewCard,
+  .successIcon {
+    animation: none;
+  }
+
+  .typing span {
+    animation: none;
+    opacity: 1;
   }
 }

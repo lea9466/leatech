@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ניהול תמונות פרויקטים</title>
+    <style>
+      :root {
+        --bg: #0a0d14;
+        --bg-raised: #12161f;
+        --bg-raised-2: #171c27;
+        --ink: #f2f5f7;
+        --ink-muted: #93a0ac;
+        --line: rgba(255, 255, 255, 0.09);
+        --line-hover: rgba(255, 255, 255, 0.22);
+        --accent: #00dce6;
+        --danger: #ff5f57;
+        --danger-hover: #ff7b74;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 2rem 2rem 6rem;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+        margin-block-end: 0.25rem;
+      }
+
+      .note {
+        color: var(--ink-muted);
+        margin-block-end: 2rem;
+        font-size: 0.95rem;
+      }
+
+      .project {
+        margin-block-end: 2.5rem;
+      }
+
+      .project h2 {
+        font-size: 1.2rem;
+        border-bottom: 1px solid var(--line);
+        padding-block-end: 0.5rem;
+        margin-block-end: 1rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1rem;
+      }
+
+      .card {
+        background: var(--bg-raised);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: border-color 150ms;
+        position: relative;
+      }
+
+      .card:hover {
+        border-color: var(--line-hover);
+      }
+
+      .card.selected {
+        border-color: var(--danger);
+        box-shadow: 0 0 0 2px var(--danger) inset;
+      }
+
+      .thumb {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        display: block;
+        background: var(--bg-raised-2);
+      }
+
+      .meta {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.75rem;
+        color: var(--ink-muted);
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+
+      .meta .fname {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        direction: ltr;
+        text-align: right;
+      }
+
+      .meta .fsize {
+        flex: 0 0 auto;
+      }
+
+      .checkmark {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: rgba(10, 13, 20, 0.75);
+        border: 1.5px solid var(--line-hover);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--danger);
+        font-size: 0.85rem;
+        opacity: 0;
+      }
+
+      .card.selected .checkmark {
+        opacity: 1;
+        background: var(--danger);
+        color: white;
+        border-color: var(--danger);
+      }
+
+      .bar {
+        position: fixed;
+        bottom: 0;
+        inset-inline: 0;
+        background: var(--bg-raised);
+        border-top: 1px solid var(--line);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .bar .count {
+        color: var(--ink-muted);
+      }
+
+      button {
+        font-family: inherit;
+        font-size: 0.95rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+      }
+
+      #delete-btn {
+        background: var(--danger);
+        color: white;
+        font-weight: 600;
+      }
+
+      #delete-btn:hover {
+        background: var(--danger-hover);
+      }
+
+      #delete-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .status {
+        font-size: 0.85rem;
+        color: var(--ink-muted);
+      }
+
+      .status.error {
+        color: var(--danger);
+      }
+
+      .status.success {
+        color: #28c840;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ניהול תמונות פרויקטים</h1>
+    <p class="note">
+      לוחצים על תמונה כדי לסמן אותה למחיקה. מחיקה מוחקת גם את הקובץ מהדיסק וגם מסירה אותה
+      מרשימת התמונות של הפרויקט — לא ניתן לבטל. דף הפיתוח בלבד, לא חלק מהאתר.
+    </p>
+
+    <div id="projects"></div>
+
+    <div class="bar">
+      <span class="count" id="count">0 תמונות נבחרו</span>
+      <span class="status" id="status"></span>
+      <button id="delete-btn" disabled>מחק את הנבחרות</button>
+    </div>
+
+    <script>
+      const selected = new Map(); // key: projectId + '::' + path -> { projectId, path, cardEl }
+      const projectsEl = document.getElementById('projects');
+      const countEl = document.getElementById('count');
+      const statusEl = document.getElementById('status');
+      const deleteBtn = document.getElementById('delete-btn');
+
+      function formatBytes(bytes) {
+        if (bytes == null) return 'לא נמצא בדיסק';
+        if (bytes < 1024) return bytes + ' B';
+        return (bytes / 1024).toFixed(0) + ' KB';
+      }
+
+      function updateBar() {
+        countEl.textContent = selected.size + ' תמונות נבחרו';
+        deleteBtn.disabled = selected.size === 0;
+      }
+
+      function toggleCard(key, card, projectId, path) {
+        if (selected.has(key)) {
+          selected.delete(key);
+          card.classList.remove('selected');
+        } else {
+          selected.set(key, { projectId, path, card });
+          card.classList.add('selected');
+        }
+        updateBar();
+      }
+
+      async function load() {
+        const res = await fetch('/api/admin/images');
+        const data = await res.json();
+        projectsEl.innerHTML = '';
+        for (const project of data.projects) {
+          const section = document.createElement('div');
+          section.className = 'project';
+
+          const h2 = document.createElement('h2');
+          h2.textContent = project.name + ' — ' + project.title + ' (' + project.images.length + ' תמונות)';
+          section.appendChild(h2);
+
+          const grid = document.createElement('div');
+          grid.className = 'grid';
+
+          for (const img of project.images) {
+            const key = project.id + '::' + img.path;
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const thumb = document.createElement('img');
+            thumb.className = 'thumb';
+            thumb.src = img.path;
+            thumb.loading = 'lazy';
+            card.appendChild(thumb);
+
+            const check = document.createElement('div');
+            check.className = 'checkmark';
+            check.textContent = '✕';
+            card.appendChild(check);
+
+            const meta = document.createElement('div');
+            meta.className = 'meta';
+            const fname = document.createElement('span');
+            fname.className = 'fname';
+            fname.textContent = img.path.split('/').pop();
+            const size = document.createElement('span');
+            size.className = 'fsize';
+            size.textContent = formatBytes(img.size);
+            meta.appendChild(fname);
+            meta.appendChild(size);
+            card.appendChild(meta);
+
+            card.addEventListener('click', () => toggleCard(key, card, project.id, img.path));
+
+            grid.appendChild(card);
+          }
+
+          section.appendChild(grid);
+          projectsEl.appendChild(section);
+        }
+      }
+
+      deleteBtn.addEventListener('click', async () => {
+        if (selected.size === 0) return;
+        const items = Array.from(selected.values());
+        const ok = confirm(
+          'למחוק ' + items.length + ' תמונות לצמיתות? זה מוחק גם את הקבצים מהדיסק, אי אפשר לשחזר.'
+        );
+        if (!ok) return;
+
+        deleteBtn.disabled = true;
+        statusEl.textContent = 'מוחקת...';
+        statusEl.className = 'status';
+
+        try {
+          const res = await fetch('/api/admin/delete-images', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              items: items.map(({ projectId, path }) => ({ projectId, path })),
+            }),
+          });
+          const data = await res.json();
+          const failed = data.results.filter((r) => !r.ok);
+          const succeeded = data.results.filter((r) => r.ok);
+
+          for (const r of data.results) {
+            const key = items.find((i) => i.path === r.path)?.projectId + '::' + r.path;
+            const entry = selected.get(key);
+            if (r.ok && entry) {
+              entry.card.remove();
+              selected.delete(key);
+            }
+          }
+
+          if (failed.length === 0) {
+            statusEl.textContent = 'נמחקו ' + succeeded.length + ' תמונות בהצלחה.';
+            statusEl.className = 'status success';
+          } else {
+            statusEl.textContent =
+              'נמחקו ' + succeeded.length + ', נכשלו ' + failed.length + ': ' +
+              failed.map((f) => f.error).join(', ');
+            statusEl.className = 'status error';
+          }
+        } catch (e) {
+          statusEl.textContent = 'שגיאה: ' + e;
+          statusEl.className = 'status error';
+        }
+
+        updateBar();
+      });
+
+      load();
+    </script>
+  </body>
+</html>

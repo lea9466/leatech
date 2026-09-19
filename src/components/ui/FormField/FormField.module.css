@@ -13,10 +13,11 @@
 .control {
   width: 100%;
   padding: var(--space-3) var(--space-4);
-  background: rgba(64, 13, 72, 0.04);
+  background: var(--bg-raised-2);
+  color: var(--color-text);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
-  transition: border-color var(--duration) var(--ease-out);
+  transition: border-color var(--duration) var(--ease-out), background-color var(--duration) var(--ease-out);
 }
 
 .control::placeholder {

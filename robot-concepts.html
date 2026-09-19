@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>דוגמאות לעיצוב הרובוט</title>
+    <style>
+      :root {
+        --bg: #0a0d14;
+        --bg-raised: #12161f;
+        --bg-raised-2: #171c27;
+        --ink: #f2f5f7;
+        --ink-muted: #93a0ac;
+        --line: rgba(255, 255, 255, 0.09);
+        --line-hover: rgba(255, 255, 255, 0.22);
+        --accent: #00dce6;
+        --accent-2: #8b5cf6;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 2rem;
+      }
+      h1 { font-size: 1.6rem; margin: 0 0 0.25rem; }
+      .note { color: var(--ink-muted); margin: 0 0 2rem; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 1.5rem;
+      }
+      .card {
+        background: var(--bg-raised);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 1.25rem 1.25rem 1.5rem;
+      }
+      .card .stage {
+        background: radial-gradient(120% 100% at 60% 30%, rgba(0, 220, 230, 0.07), transparent 65%), var(--bg);
+        border-radius: 12px;
+        border: 1px solid var(--line);
+      }
+      .card svg { display: block; width: 100%; height: auto; }
+      .head { display: flex; align-items: center; gap: 0.75rem; margin-block: 1rem 0.35rem; }
+      .num {
+        width: 2rem; height: 2rem; border-radius: 50%;
+        display: inline-flex; align-items: center; justify-content: center;
+        background: linear-gradient(100deg, var(--accent), var(--accent-2));
+        color: #06121a; font-weight: 800;
+      }
+      .num.cur { background: var(--bg-raised-2); color: var(--ink-muted); border: 1px solid var(--line-hover); }
+      .card h2 { font-size: 1.05rem; margin: 0; }
+      .card p { color: var(--ink-muted); margin: 0; font-size: 0.9rem; line-height: 1.55; }
+
+      /* צבעי הציור */
+      .metal { fill: url(#metal); stroke: var(--line-hover); stroke-width: 1.5; }
+      .metalLight { fill: url(#metalLight); stroke: rgba(255, 255, 255, 0.45); stroke-width: 1.5; }
+      .dark { fill: #06090f; }
+      .panel { fill: #0f131b; stroke: var(--line); stroke-width: 1.2; }
+      .line { stroke: var(--line-hover); fill: none; }
+      .acc { fill: var(--accent); }
+      .acc2 { fill: var(--accent-2); }
+      .mute { fill: var(--ink-muted); }
+      .limb { stroke: var(--line-hover); stroke-linecap: round; fill: none; }
+      .limbFill { stroke: #232a3a; stroke-linecap: round; fill: none; }
+      .limbLight { stroke: #dfe6ee; stroke-linecap: round; fill: none; }
+      .limbLightEdge { stroke: #8d99a8; stroke-linecap: round; fill: none; }
+    </style>
+  </head>
+  <body>
+    <h1>דוגמאות לעיצוב הרובוט</h1>
+    <p class="note">כולם באותה תנוחה — מצביע עם פנס דלוק לכיוון הטופס. תגידי לי איזה מספר, או שילוב (למשל "הראש של 2 והגוף של 4").</p>
+
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <filter id="blur6" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6" /></filter>
+        <filter id="blur3" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3" /></filter>
+        <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2d3648" />
+          <stop offset="1" stop-color="#151a24" />
+        </linearGradient>
+        <linearGradient id="metalLight" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#f6f9fc" />
+          <stop offset="1" stop-color="#a9b5c3" />
+        </linearGradient>
+        <linearGradient id="beamGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="-100" y2="0">
+          <stop offset="0" stop-color="#00dce6" stop-opacity="0.55" />
+          <stop offset="1" stop-color="#00dce6" stop-opacity="0" />
+        </linearGradient>
+
+        <!-- קרן אור: מקור ב-(0,0), פונה שמאלה -->
+        <g id="beam"><polygon points="-6,-5 -6,5 -100,32 -100,-32" fill="url(#beamGrad)" /></g>
+
+        <!-- פנס דלוק: מרכז ב-(0,0) -->
+        <g id="lantern">
+          <circle r="16" fill="#00dce6" opacity="0.85" filter="url(#blur6)" />
+          <path d="M-5 -12 L-5 -17 Q0 -21 5 -17 L5 -12" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" />
+          <rect x="-9" y="-12" width="18" height="24" rx="5" fill="#171c27" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" />
+          <circle r="5.5" fill="#00dce6" />
+          <circle r="2.2" fill="#dffcff" />
+        </g>
+      </defs>
+    </svg>
+
+    <div class="grid">
+      <!-- 1. תעשייתי קלאסי -->
+      <div class="card">
+        <div class="stage">
+          <svg viewBox="-50 0 300 230" role="img" aria-label="רובוט תעשייתי קלאסי">
+            <ellipse cx="150" cy="204" rx="46" ry="5" fill="#00dce6" opacity="0.12" />
+            <use href="#beam" transform="translate(40 66) rotate(-8)" />
+
+            <!-- זרוע שמאל: מצביעה -->
+            <path class="limb" d="M106 100 L74 86" stroke-width="15" />
+            <path class="limbFill" d="M106 100 L74 86" stroke-width="11" />
+            <path class="limb" d="M74 86 L52 72" stroke-width="15" />
+            <path class="limbFill" d="M74 86 L52 72" stroke-width="11" />
+            <circle class="metal" cx="74" cy="86" r="7" />
+            <circle class="metal" cx="106" cy="100" r="9" />
+            <rect class="panel" x="44" y="66" width="12" height="12" rx="3" />
+
+            <!-- זרוע ימין: רפויה -->
+            <circle class="metal" cx="194" cy="100" r="9" />
+            <rect class="metal" x="189" y="106" width="10" height="28" rx="4" />
+            <circle class="metal" cx="194" cy="136" r="5" />
+            <rect class="metal" x="190" y="140" width="8" height="22" rx="3" />
+            <rect class="panel" x="188" y="162" width="12" height="9" rx="3" />
+
+            <!-- רגליים -->
+            <rect class="metal" x="126" y="160" width="18" height="32" rx="4" />
+            <rect class="metal" x="156" y="160" width="18" height="32" rx="4" />
+            <line class="line" x1="126" y1="176" x2="144" y2="176" stroke-width="1.2" />
+            <line class="line" x1="156" y1="176" x2="174" y2="176" stroke-width="1.2" />
+            <rect class="metal" x="120" y="190" width="30" height="12" rx="4" />
+            <rect class="metal" x="150" y="190" width="30" height="12" rx="4" />
+            <rect class="metal" x="122" y="150" width="56" height="12" rx="4" />
+
+            <!-- גוף -->
+            <rect class="metal" x="112" y="84" width="76" height="68" rx="10" />
+            <rect class="panel" x="126" y="98" width="48" height="30" rx="5" />
+            <circle class="acc" cx="138" cy="108" r="3.5" />
+            <circle class="acc2" cx="150" cy="108" r="3.5" />
+            <circle class="mute" cx="162" cy="108" r="3.5" />
+            <line class="line" x1="132" y1="117" x2="168" y2="117" stroke-width="1.5" />
+            <line class="line" x1="132" y1="121" x2="168" y2="121" stroke-width="1.5" />
+            <line class="line" x1="132" y1="125" x2="168" y2="125" stroke-width="1.5" />
+            <circle fill="rgba(255,255,255,.35)" cx="120" cy="92" r="2" />
+            <circle fill="rgba(255,255,255,.35)" cx="180" cy="92" r="2" />
+            <circle fill="rgba(255,255,255,.35)" cx="120" cy="144" r="2" />
+            <circle fill="rgba(255,255,255,.35)" cx="180" cy="144" r="2" />
+
+            <!-- ראש -->
+            <rect class="panel" x="143" y="76" width="14" height="10" />
+            <rect class="metal" x="116" y="48" width="8" height="18" rx="2" />
+            <rect class="metal" x="176" y="48" width="8" height="18" rx="2" />
+            <rect class="metal" x="122" y="32" width="56" height="46" rx="9" />
+            <rect class="dark" x="130" y="44" width="40" height="18" rx="4" />
+            <rect class="acc" x="136" y="49" width="10" height="7" rx="2" />
+            <rect class="acc" x="154" y="49" width="10" height="7" rx="2" />
+            <line class="line" x1="150" y1="32" x2="150" y2="17" stroke-width="2.5" stroke-linecap="round" />
+            <circle class="acc2" cx="150" cy="14" r="4.5" />
+
+            <use href="#lantern" transform="translate(40 66) rotate(-18)" />
+          </svg>
+        </div>
+        <div class="head"><span class="num">1</span><h2>תעשייתי קלאסי</h2></div>
+        <p>גוף ריבועי עם מסך לוחצנים בחזה, ברגים, מפרקים עגולים ורגליים של מתכת. הכי "רובוט" במובן הרטרו.</p>
+      </div>
+
+      <!-- 2. רובוט גלגל -->
+      <div class="card">
+        <div class="stage">
+          <svg viewBox="-50 0 300 230" role="img" aria-label="רובוט גלגל">
+            <ellipse cx="150" cy="212" rx="40" ry="5" fill="#00dce6" opacity="0.18" />
+            <use href="#beam" transform="translate(50 84) rotate(-8)" />
+
+            <!-- גלגל -->
+            <circle cx="150" cy="188" r="22" fill="#0b0e14" stroke="rgba(255,255,255,.22)" stroke-width="2" />
+            <circle cx="150" cy="188" r="22" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2" stroke-dasharray="3 5" />
+            <circle class="metal" cx="150" cy="188" r="10" />
+            <circle class="acc" cx="150" cy="188" r="3" />
+            <rect class="panel" x="144" y="158" width="12" height="10" rx="2" />
+
+            <!-- זרוע ימין: קצרה, למטה -->
+            <circle class="metal" cx="182" cy="122" r="7" />
+            <path class="limb" d="M182 122 L192 146" stroke-width="12" />
+            <path class="limbFill" d="M182 122 L192 146" stroke-width="8" />
+            <circle class="metal" cx="192" cy="148" r="5" />
+
+            <!-- גוף -->
+            <path class="metal" d="M118 118 Q118 104 132 104 L168 104 Q182 104 182 118 L174 152 Q172 162 162 162 L138 162 Q128 162 126 152 Z" />
+            <rect class="dark" x="134" y="122" width="32" height="18" rx="4" stroke="rgba(255,255,255,.22)" stroke-width="1.2" />
+            <polyline points="138,131 144,131 148,124 153,138 157,128 162,131" fill="none" stroke="#00dce6" stroke-width="1.8" stroke-linejoin="round" />
+            <circle class="acc2" cx="142" cy="150" r="2.5" />
+            <circle class="mute" cx="150" cy="150" r="2.5" />
+            <circle class="acc" cx="158" cy="150" r="2.5" />
+
+            <!-- צוואר וראש כיפה -->
+            <ellipse class="panel" cx="150" cy="102" rx="17" ry="5" />
+            <path class="metal" d="M110 98 A40 36 0 0 1 190 98 Z" />
+            <line class="line" x1="112" y1="90" x2="188" y2="90" stroke-width="1" opacity="0.6" />
+            <circle cx="150" cy="80" r="17" fill="#06090f" stroke="#00dce6" stroke-width="2.5" />
+            <circle class="acc" cx="150" cy="80" r="9" />
+            <circle class="dark" cx="150" cy="80" r="4" />
+            <circle cx="154" cy="76" r="2.2" fill="#fff" opacity="0.85" />
+            <line class="line" x1="128" y1="66" x2="120" y2="50" stroke-width="2.5" stroke-linecap="round" />
+            <circle class="acc2" cx="119" cy="47" r="3.5" />
+            <line class="line" x1="172" y1="66" x2="180" y2="50" stroke-width="2.5" stroke-linecap="round" />
+            <circle class="acc" cx="181" cy="47" r="3.5" />
+
+            <!-- זרוע שמאל: מצביעה, עם צביטה שמחזיקה פנס -->
+            <circle class="metal" cx="118" cy="122" r="7" />
+            <path class="limb" d="M118 122 L90 112" stroke-width="12" />
+            <path class="limbFill" d="M118 122 L90 112" stroke-width="8" />
+            <circle class="metal" cx="90" cy="112" r="5.5" />
+            <path class="limb" d="M90 112 L66 96" stroke-width="12" />
+            <path class="limbFill" d="M90 112 L66 96" stroke-width="8" />
+            <path class="limb" d="M66 96 L57 89 M66 96 L59 103" stroke-width="5" />
+            <use href="#lantern" transform="translate(50 84) rotate(-18)" />
+          </svg>
+        </div>
+        <div class="head"><span class="num">2</span><h2>רובוט גלגל</h2></div>
+        <p>בלי רגליים — גלגל אחד, ראש כיפה עם עין-מצלמה גדולה וזרוע עם צביטה שמחזיקה את הפנס. מרגיש כמו רובוט שירות אמיתי.</p>
+      </div>
+
+      <!-- 3. חלק ומודרני -->
+      <div class="card">
+        <div class="stage">
+          <svg viewBox="-50 0 300 230" role="img" aria-label="רובוט חלק ומודרני">
+            <ellipse cx="150" cy="212" rx="30" ry="5" fill="#00dce6" opacity="0.25" />
+            <ellipse cx="150" cy="200" rx="14" ry="4" fill="#00dce6" opacity="0.55" filter="url(#blur3)" />
+            <use href="#beam" transform="translate(58 92) rotate(-8)" />
+
+            <!-- זרוע ימין: צפה -->
+            <path class="limbLightEdge" d="M184 124 L194 152" stroke-width="15" />
+            <path class="limbLight" d="M184 124 L194 152" stroke-width="12" />
+
+            <!-- גוף ביצה -->
+            <ellipse class="metalLight" cx="150" cy="138" rx="35" ry="55" />
+            <path d="M117 132 Q150 144 183 132" fill="none" stroke="rgba(0,0,0,.22)" stroke-width="1.5" />
+            <circle class="acc2" cx="150" cy="152" r="4" />
+            <circle cx="150" cy="152" r="7" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1.2" />
+
+            <!-- פנים -->
+            <ellipse cx="150" cy="102" rx="28" ry="20" fill="#0b0e14" stroke="rgba(255,255,255,.35)" stroke-width="1.5" />
+            <ellipse cx="140" cy="102" rx="5" ry="7.5" fill="#00dce6" opacity="0.9" filter="url(#blur3)" />
+            <ellipse cx="160" cy="102" rx="5" ry="7.5" fill="#00dce6" opacity="0.9" filter="url(#blur3)" />
+            <ellipse class="acc" cx="140" cy="102" rx="4.5" ry="7" />
+            <ellipse class="acc" cx="160" cy="102" rx="4.5" ry="7" />
+
+            <!-- זרוע שמאל: צפה ומצביעה -->
+            <circle cx="118" cy="122" r="6" fill="none" stroke="#00dce6" stroke-width="2" />
+            <path class="limbLightEdge" d="M112 120 L84 102" stroke-width="15" />
+            <path class="limbLight" d="M112 120 L84 102" stroke-width="12" />
+            <ellipse cx="78" cy="98" rx="9" ry="8" fill="#dfe6ee" stroke="#8d99a8" stroke-width="1.5" />
+            <use href="#lantern" transform="translate(64 92) rotate(-18)" />
+          </svg>
+        </div>
+        <div class="head"><span class="num">3</span><h2>חלק ומודרני</h2></div>
+        <p>גוף לבן מבריק בצורת ביצה, מסך פנים כהה עם עיניים זוהרות, ידיים שצפות בלי חיבור. סגנון "רובוט עתידני" נקי.</p>
+      </div>
+
+      <!-- 4. מכ"ם / סייבר -->
+      <div class="card">
+        <div class="stage">
+          <svg viewBox="-50 0 300 230" role="img" aria-label="רובוט זוויתי">
+            <ellipse cx="150" cy="208" rx="48" ry="5" fill="#00dce6" opacity="0.12" />
+            <use href="#beam" transform="translate(40 66) rotate(-8)" />
+
+            <!-- רגליים -->
+            <polygon class="metal" points="134,150 148,150 146,174 130,174" />
+            <polygon class="metal" points="152,150 166,150 170,174 154,174" />
+            <polygon class="metal" points="130,174 146,174 143,198 134,198" />
+            <polygon class="metal" points="154,174 170,174 166,198 157,198" />
+            <circle class="panel" cx="138" cy="174" r="4.5" />
+            <circle class="panel" cx="162" cy="174" r="4.5" />
+            <polygon class="metal" points="126,198 146,198 152,208 120,208" />
+            <polygon class="metal" points="154,198 174,198 180,208 148,208" />
+
+            <!-- זרוע ימין -->
+            <path class="limb" d="M196 106 L204 132" stroke-width="13" />
+            <path class="limbFill" d="M196 106 L204 132" stroke-width="9" />
+            <circle class="metal" cx="204" cy="134" r="5" />
+            <path class="limb" d="M204 134 L198 158" stroke-width="12" />
+            <path class="limbFill" d="M204 134 L198 158" stroke-width="8" />
+            <polygon class="panel" points="192,158 204,158 202,168 194,168" />
+
+            <!-- גוף -->
+            <polygon class="metal" points="124,88 176,88 170,132 130,132" />
+            <polygon class="metal" points="132,132 168,132 164,150 136,150" />
+            <line class="line" x1="130" y1="98" x2="170" y2="98" stroke-width="1" opacity="0.6" />
+            <circle cx="150" cy="110" r="14" fill="#00dce6" opacity="0.5" filter="url(#blur6)" />
+            <circle cx="150" cy="110" r="11" fill="#06090f" stroke="#8b5cf6" stroke-width="2" />
+            <circle class="acc" cx="150" cy="110" r="6" />
+            <path d="M136 122 L128 132 M164 122 L172 132" stroke="rgba(255,255,255,.22)" stroke-width="1.2" fill="none" />
+            <path d="M142 150 L142 160 M158 150 L158 160" stroke="#8b5cf6" stroke-width="1.6" stroke-dasharray="3 3" fill="none" />
+
+            <!-- כתפיים -->
+            <polygon class="metal" points="194,90 174,88 174,110 190,114 200,102" />
+            <polygon class="metal" points="106,90 126,88 126,110 110,114 100,102" />
+
+            <!-- זרוע שמאל: מצביעה -->
+            <path class="limb" d="M108 104 L78 92" stroke-width="14" />
+            <path class="limbFill" d="M108 104 L78 92" stroke-width="10" />
+            <circle class="metal" cx="78" cy="92" r="6.5" />
+            <path class="limb" d="M78 92 L52 78" stroke-width="17" />
+            <path class="limbFill" d="M78 92 L52 78" stroke-width="13" />
+            <line x1="66" y1="80" x2="72" y2="92" stroke="#8b5cf6" stroke-width="1.6" />
+
+            <!-- ראש משושה -->
+            <polygon class="metal" points="146,92 154,92 152,88 148,88" />
+            <polygon class="acc2" opacity="0.85" points="124,50 111,40 111,60" />
+            <polygon class="acc2" opacity="0.85" points="176,50 189,40 189,60" />
+            <polygon class="metal" points="150,30 176,44 176,68 150,82 124,68 124,44" />
+            <polygon class="metal" points="143,30 150,20 157,30" />
+            <polygon class="dark" points="132,52 168,52 164,64 136,64" />
+            <polygon class="acc" points="137,55 163,55 161,60 139,60" />
+
+            <use href="#lantern" transform="translate(40 68) rotate(-18)" />
+          </svg>
+        </div>
+        <div class="head"><span class="num">4</span><h2>מכ"ם / סייבר</h2></div>
+        <p>קווים זוויתיים, ראש משושה עם ויזור, כפתורי כתף ומגן חזה עם ליבה זוהרת. נראה כמו משהו מסרט מדע בדיוני.</p>
+      </div>
+
+      <!-- 0. הנוכחי להשוואה -->
+      <div class="card">
+        <div class="stage">
+          <svg viewBox="-50 0 300 230" role="img" aria-label="הרובוט הנוכחי">
+            <use href="#beam" transform="translate(78.8 60.2) rotate(-8)" />
+            <g transform="translate(222 0) scale(-1 1)">
+              <g>
+                <rect x="57" y="118" width="10" height="34" rx="5" class="metal" />
+                <rect x="93" y="118" width="10" height="34" rx="5" class="metal" />
+              </g>
+              <rect x="46" y="64" width="52" height="56" rx="16" class="metal" style="fill: #171c27" />
+              <path d="M46 76 Q32 88 36 104" fill="none" stroke="#171c27" stroke-width="9" stroke-linecap="round" />
+              <g transform="rotate(55 98 76)">
+                <path d="M98 76 Q118 66 112 38" fill="none" stroke="#171c27" stroke-width="9" stroke-linecap="round" />
+              </g>
+              <rect x="52" y="30" width="40" height="34" rx="12" class="metal" style="fill: #171c27" />
+              <circle cx="63" cy="47" r="3.5" class="acc" />
+              <circle cx="81" cy="47" r="3.5" class="acc" />
+              <line x1="72" y1="30" x2="72" y2="18" class="line" stroke-width="2.5" stroke-linecap="round" />
+              <circle cx="72" cy="15" r="4" class="acc2" />
+            </g>
+            <use href="#lantern" transform="translate(78.8 60.2) rotate(-18)" />
+          </svg>
+        </div>
+        <div class="head"><span class="num cur">•</span><h2>הנוכחי (להשוואה)</h2></div>
+        <p>הרובוט שיש היום באתר — פשוט וחביב, אבל נראה יותר כמו דמות מצוירת מאשר רובוט.</p>
+      </div>
+    </div>
+  </body>
+</html>

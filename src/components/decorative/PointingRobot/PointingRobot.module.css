@@ -1,0 +1,206 @@
+.root {
+  width: 11rem;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.shadow {
+  fill: var(--accent);
+  opacity: 0.25;
+}
+
+.thruster {
+  fill: var(--accent);
+  opacity: 0.55;
+  filter: blur(3px);
+}
+
+.body {
+  fill: url(#pointing-body);
+  stroke: var(--line-hover);
+  stroke-width: 1.5;
+}
+
+.seam {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.22);
+  stroke-width: 1.5;
+}
+
+.chestLight {
+  fill: var(--accent-2);
+}
+
+.chestRing {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.25);
+  stroke-width: 1.2;
+}
+
+.face {
+  fill: #0b0e14;
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 1.5;
+}
+
+.eye {
+  fill: var(--accent);
+}
+
+.eyeGlow {
+  fill: var(--accent);
+  opacity: 0.9;
+  filter: blur(3px);
+}
+
+.limbEdge,
+.limb {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.limbEdge {
+  stroke: #8d99a8;
+}
+
+.limb {
+  stroke: #dfe6ee;
+}
+
+.hand {
+  fill: #dfe6ee;
+  stroke: #8d99a8;
+  stroke-width: 1.5;
+}
+
+.socket {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+/* ברירת מחדל (לפני שהאזור נראה): היד למטה. 0 = מושטת ומצביעה שמאלה */
+.armFront {
+  transform-origin: 118px 122px;
+  transform: rotate(-105deg);
+}
+
+.play .armFront {
+  animation: point-raise 1100ms var(--ease-out) forwards;
+}
+
+@keyframes point-raise {
+  from { transform: rotate(-105deg); }
+  to { transform: rotate(0deg); }
+}
+
+.lanternHandle {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lanternBody {
+  fill: var(--bg-raised-2);
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1.5;
+}
+
+.lanternBulb {
+  fill: var(--ink-muted);
+}
+
+.lanternBulbLit {
+  fill: var(--accent);
+  opacity: 0;
+}
+
+.lanternCore {
+  fill: #dffcff;
+  opacity: 0;
+}
+
+.lanternHalo {
+  fill: var(--accent);
+  filter: blur(6px);
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  transform: scale(0.65);
+}
+
+.beam {
+  opacity: 0;
+}
+
+.beamStart {
+  stop-color: var(--accent);
+  stop-opacity: 0.55;
+}
+
+.beamEnd {
+  stop-color: var(--accent);
+  stop-opacity: 0;
+}
+
+/* הפנס נדלק וקרן האור נפתחת אחרי שהיד כבר מושטת */
+.play .lanternBulbLit,
+.play .lanternCore {
+  animation: fade-in 500ms var(--ease-out) 900ms forwards;
+}
+
+.play .lanternHalo {
+  animation: halo-in 600ms var(--ease-out) 900ms forwards;
+}
+
+.play .beam {
+  animation: fade-in 900ms var(--ease-out) 1000ms forwards;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes halo-in {
+  from { opacity: 0; transform: scale(0.65); }
+  to { opacity: 0.85; transform: scale(1.25); }
+}
+
+@media (max-width: 900px) {
+  .root {
+    width: 8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .armFront,
+  .play .armFront {
+    transform: rotate(0deg);
+    animation: none;
+  }
+
+  .lanternBulbLit,
+  .lanternCore,
+  .beam,
+  .play .lanternBulbLit,
+  .play .lanternCore,
+  .play .beam {
+    opacity: 1;
+    animation: none;
+  }
+
+  .lanternHalo,
+  .play .lanternHalo {
+    opacity: 0.85;
+    transform: scale(1.25);
+    animation: none;
+  }
+}

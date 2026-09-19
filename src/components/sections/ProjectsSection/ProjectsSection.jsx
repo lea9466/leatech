@@ -14,7 +14,6 @@ export function ProjectsSection() {
           id={HEADING_ID}
           eyebrow="פרויקטים"
           title="פרויקטים נבחרים"
-          description="שלושה פרויקטים אמיתיים — לא הדמיות."
           gradient
         />
 

@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>עריכת תוכן פרויקטים</title>
+    <style>
+      :root {
+        --bg: #0a0d14;
+        --bg-raised: #12161f;
+        --bg-raised-2: #171c27;
+        --ink: #f2f5f7;
+        --ink-muted: #93a0ac;
+        --line: rgba(255, 255, 255, 0.09);
+        --line-hover: rgba(255, 255, 255, 0.22);
+        --accent: #00dce6;
+        --accent-2: #8b5cf6;
+        --danger: #ff5f57;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 2rem 2rem 7rem;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+        margin-block-end: 0.25rem;
+      }
+
+      .note {
+        color: var(--ink-muted);
+        margin-block-end: 2rem;
+        font-size: 0.95rem;
+      }
+
+      .project {
+        background: var(--bg-raised);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-block-end: 1.5rem;
+      }
+
+      .project h2 {
+        margin-block: 0 1.25rem;
+        font-size: 1.15rem;
+        color: var(--accent);
+      }
+
+      .field {
+        margin-block-end: 1.1rem;
+      }
+
+      .field label {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--ink-muted);
+        margin-block-end: 0.35rem;
+      }
+
+      .field input,
+      .field textarea {
+        width: 100%;
+        background: var(--bg-raised-2);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--ink);
+        font-family: inherit;
+        font-size: 0.95rem;
+        padding: 0.55rem 0.7rem;
+        direction: rtl;
+      }
+
+      .field input:focus,
+      .field textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+
+      .field textarea {
+        resize: vertical;
+        min-height: 4.5em;
+        line-height: 1.5;
+      }
+
+      .row2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .highlights {
+        border-top: 1px solid var(--line);
+        padding-block-start: 1.1rem;
+        margin-block-start: 0.5rem;
+      }
+
+      .highlights > .htitle {
+        font-size: 0.85rem;
+        color: var(--ink-muted);
+        margin-block-end: 0.75rem;
+      }
+
+      .highlight {
+        background: var(--bg-raised-2);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0.9rem;
+        margin-block-end: 0.75rem;
+      }
+
+      .highlight .field {
+        margin-block-end: 0.6rem;
+      }
+
+      .highlight .field:last-child {
+        margin-block-end: 0;
+      }
+
+      .bar {
+        position: fixed;
+        bottom: 0;
+        inset-inline: 0;
+        background: var(--bg-raised);
+        border-top: 1px solid var(--line);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      button {
+        font-family: inherit;
+        font-size: 0.95rem;
+        padding: 0.65rem 1.4rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      #save-btn {
+        background: linear-gradient(100deg, var(--accent), var(--accent-2));
+        color: #06121a;
+      }
+
+      #save-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .status {
+        font-size: 0.9rem;
+        color: var(--ink-muted);
+      }
+
+      .status.error {
+        color: var(--danger);
+      }
+
+      .status.success {
+        color: #28c840;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>עריכת תוכן פרויקטים</h1>
+    <p class="note">
+      עריכה ישירה של הטקסטים שמוצגים בכרטיסי הפרויקטים באתר. השינויים נשמרים ישר לקובץ
+      התוכן — לוחצים "שמור הכל" בסוף כדי שהם ייכנסו לתוקף. דף הפיתוח בלבד, לא חלק מהאתר.
+    </p>
+
+    <div id="projects"></div>
+
+    <div class="bar">
+      <button id="save-btn">שמור הכל</button>
+      <span class="status" id="status"></span>
+    </div>
+
+    <script>
+      let projectsData = [];
+      const projectsEl = document.getElementById('projects');
+      const statusEl = document.getElementById('status');
+      const saveBtn = document.getElementById('save-btn');
+
+      function field(label, value, { textarea = false, path } = {}) {
+        const wrap = document.createElement('div');
+        wrap.className = 'field';
+        const lbl = document.createElement('label');
+        lbl.textContent = label;
+        wrap.appendChild(lbl);
+        const input = document.createElement(textarea ? 'textarea' : 'input');
+        input.value = value ?? '';
+        input.dataset.path = path;
+        wrap.appendChild(input);
+        return wrap;
+      }
+
+      function renderProject(project, index) {
+        const section = document.createElement('div');
+        section.className = 'project';
+
+        const h2 = document.createElement('h2');
+        h2.textContent = project.name + ' (' + project.id + ')';
+        section.appendChild(h2);
+
+        section.appendChild(field('שם (name)', project.name, { path: `${index}.name` }));
+
+        const row2 = document.createElement('div');
+        row2.className = 'row2';
+        row2.appendChild(field('כותרת (title)', project.title, { path: `${index}.title` }));
+        row2.appendChild(field('תגית (tag)', project.tag, { path: `${index}.tag` }));
+        section.appendChild(row2);
+
+        section.appendChild(field('תקציר (summary)', project.summary, { textarea: true, path: `${index}.summary` }));
+        section.appendChild(field('קישור (link)', project.link, { path: `${index}.link` }));
+        section.appendChild(
+          field('תיאור מפורט (detail.description)', project.detail.description, {
+            textarea: true,
+            path: `${index}.detail.description`,
+          })
+        );
+
+        const hWrap = document.createElement('div');
+        hWrap.className = 'highlights';
+        const hTitle = document.createElement('div');
+        hTitle.className = 'htitle';
+        hTitle.textContent = 'נקודות מודגשות (highlights)';
+        hWrap.appendChild(hTitle);
+
+        project.detail.highlights.forEach((h, hi) => {
+          const hBox = document.createElement('div');
+          hBox.className = 'highlight';
+          hBox.appendChild(field('כותרת', h.title, { path: `${index}.detail.highlights.${hi}.title` }));
+          hBox.appendChild(field('טקסט', h.text, { textarea: true, path: `${index}.detail.highlights.${hi}.text` }));
+          hWrap.appendChild(hBox);
+        });
+
+        section.appendChild(hWrap);
+        return section;
+      }
+
+      async function load() {
+        const res = await fetch('/api/admin/projects');
+        const data = await res.json();
+        projectsData = data.projects;
+        projectsEl.innerHTML = '';
+        projectsData.forEach((p, i) => projectsEl.appendChild(renderProject(p, i)));
+      }
+
+      function collectAndApply() {
+        const inputs = document.querySelectorAll('[data-path]');
+        for (const input of inputs) {
+          const path = input.dataset.path.split('.');
+          let target = projectsData;
+          for (let i = 0; i < path.length - 1; i++) {
+            const key = /^\d+$/.test(path[i]) ? Number(path[i]) : path[i];
+            target = target[key];
+          }
+          const lastKey = /^\d+$/.test(path[path.length - 1])
+            ? Number(path[path.length - 1])
+            : path[path.length - 1];
+          target[lastKey] = input.value;
+        }
+      }
+
+      saveBtn.addEventListener('click', async () => {
+        collectAndApply();
+        saveBtn.disabled = true;
+        statusEl.textContent = 'שומרת...';
+        statusEl.className = 'status';
+
+        try {
+          const res = await fetch('/api/admin/save-projects', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ projects: projectsData }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            statusEl.textContent = 'נשמר בהצלחה.';
+            statusEl.className = 'status success';
+          } else {
+            statusEl.textContent = 'שגיאה: ' + data.error;
+            statusEl.className = 'status error';
+          }
+        } catch (e) {
+          statusEl.textContent = 'שגיאה: ' + e;
+          statusEl.className = 'status error';
+        }
+
+        saveBtn.disabled = false;
+      });
+
+      load();
+    </script>
+  </body>
+</html>

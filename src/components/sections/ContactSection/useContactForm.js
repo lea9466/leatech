@@ -70,6 +70,9 @@ export function useContactForm() {
     errors: form.formState.errors,
     isSubmitting: form.formState.isSubmitting,
     handleSubmit: form.handleSubmit(onSubmit),
+    trigger: form.trigger,
+    setValue: form.setValue,
+    getValues: form.getValues,
     status,
   };
 }

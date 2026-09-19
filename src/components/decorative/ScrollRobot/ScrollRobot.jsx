@@ -1,62 +1,53 @@
 import { useEffect, useRef, useState } from 'react';
-import { usePrefersReducedMotion } from '../../../hooks/usePrefersReducedMotion';
+import { cn } from '../../../utils/cn';
 import styles from './ScrollRobot.module.css';
 
-const clamp01 = (n) => Math.min(1, Math.max(0, n));
-const remap = (v, a, b) => clamp01((v - a) / (b - a));
-
 /**
- * רובוט קטן שנכנס מצד שמאל של המסך תוך כדי גלילה בין "מי אני" ל"שירותים",
- * הולך קצת, ואז מרים פנס שנדלק — כל השלבים קשורים ישירות למיקום הגלילה
- * (לא אנימציה חד-פעמית), כדי שהתחושה תהיה "תוך כדי שגוללים".
+ * רובוט קטן שנכנס מצד שמאל של המסך ממש כשמגיעים לאזור שלו: לא מספיק
+ * שהאזור "יעבור" מתחת לרף מסוים תוך כדי גלילה מהירה — צריך שהגלילה
+ * גם תיעצר בפועל ליד האזור (debounce על אירועי scroll, עם בדיקת
+ * נראות מחדש ברגע שהגלילה נרגעת), אחרת התחלת האנימציה מקדימה את
+ * הרגע שבו המשתמשת בפועל מסתכלת עליו. מהליך בנחת, מרים פנס שנדלק —
+ * אנימציה חד-פעמית על ציר זמן משלה, לא תלוית גלילה מרגע שהתחילה,
+ * ולא חוזרת אחורה.
  */
 export function ScrollRobot() {
   const ref = useRef(null);
-  const [progress, setProgress] = useState(0);
-  const reducedMotion = usePrefersReducedMotion();
+  const [play, setPlay] = useState(false);
 
   useEffect(() => {
-    if (reducedMotion) return undefined;
+    if (play) return undefined;
     const node = ref.current;
     if (!node) return undefined;
 
-    let ticking = false;
-    const update = () => {
-      ticking = false;
+    const isSettledInView = () => {
       const rect = node.getBoundingClientRect();
-      const vh = window.innerHeight;
-      // 0 כשראש האלמנט בתחתית המסך (עוד לא נראה), 1 כשהוא עבר לגמרי
-      // למעלה — טווח גלילה מלא כדי שההליכה תהיה מספיק ארוכה להבחין בה.
-      setProgress(remap(vh - rect.top, 0, vh + rect.height));
-    };
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(update);
+      const visible = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+      return visible / rect.height >= 0.5;
     };
 
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    let settleTimer;
+    const scheduleCheck = () => {
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(() => {
+        if (isSettledInView()) setPlay(true);
+      }, 250);
+    };
+
+    scheduleCheck();
+    window.addEventListener('scroll', scheduleCheck, { passive: true });
+    window.addEventListener('resize', scheduleCheck);
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      clearTimeout(settleTimer);
+      window.removeEventListener('scroll', scheduleCheck);
+      window.removeEventListener('resize', scheduleCheck);
     };
-  }, [reducedMotion]);
-
-  const walk = remap(progress, 0.08, 0.58);
-  const arm = remap(progress, 0.52, 0.74);
-  const lit = remap(progress, 0.7, 0.92);
-  const walking = walk > 0.02 && walk < 0.98;
-
-  const style = reducedMotion
-    ? undefined
-    : { '--walk': walk, '--arm': arm, '--lit': lit };
+  }, [play]);
 
   return (
     <div className={styles.section} aria-hidden="true">
-      <div className={styles.container}>
-        <div ref={ref} className={styles.figure} style={style} data-walking={walking || undefined}>
+      <div ref={ref} className={styles.container}>
+        <div className={cn(styles.figure, play && styles.play)}>
           <svg viewBox="0 0 160 170" className={styles.svg} xmlns="http://www.w3.org/2000/svg">
             <g className={styles.legs}>
               <rect x="57" y="118" width="10" height="34" rx="5" className={styles.leg1} />

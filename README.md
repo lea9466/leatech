@@ -5,8 +5,9 @@ npm install
 npm run dev
 
 ## חיבור הטופס לאוטומציה
-העתיקו את `.env.example` ל-`.env` והגדירו `VITE_CONTACT_ENDPOINT` (Webhook של n8n / Make).
-בלי כתובת – הטופס עובד במצב הדגמה.
+העתיקו את `.env.example` ל-`.env` והגדירו `VITE_CONTACT_ENDPOINT` (Webhook של Make / n8n).
+באחסון (Vercel): להוסיף את אותו משתנה ב-Project Settings ← Environment Variables ולעשות Redeploy.
+בלי כתובת – הטופס עובד במצב הדגמה ולא שולח כלום.
 
 ## מבנה
 - `constants/` – כל התוכן (טקסטים, פרויקט, שירותים). עריכת תוכן = עריכה כאן בלבד.

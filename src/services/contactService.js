@@ -1,9 +1,9 @@
 import { FORM_LIMITS } from '../constants/contactForm';
 
-const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT;
+const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT || null;
 
 /**
- * שולח את הפנייה ל-Webhook (n8n / Make / שרת).
+ * שולח את הפנייה ל-Webhook (n8n / Make / שרת), כתובת מ-VITE_CONTACT_ENDPOINT.
  * בלי ENDPOINT מוגדר – מדמה הצלחה כדי שהאתר יעבוד בהדגמה.
  */
 export async function sendContactForm(payload) {

@@ -19,7 +19,13 @@
   height: auto;
   transform-style: preserve-3d;
   filter: drop-shadow(0 30px 55px rgba(0, 0, 0, 0.4));
-  animation: visual-in 1300ms cubic-bezier(0.22, 1.28, 0.36, 1) both;
+  /* שתי אנימציות נפרדות בכוונה: ה-opacity נפתר מהר (כדי שהמסך יהיה
+     גלוי), וה-transform (הסיבוב) ממשיך על פני כל משך הזמן בקצב
+     אחיד (ease-in-out, לא העקומה עם ה-overshoot של 1.28 שפותרת את
+     רוב הסיבוב תוך כ-30% מהזמן לא משנה כמה מאריכים את המשך) — כדי
+     שבאמת רואים אותו מסתובב תוך כדי שהוא כבר גלוי. */
+  animation: visual-in-opacity 900ms var(--ease-out) both,
+    visual-in-transform 1700ms ease-in-out both;
   animation-delay: 200ms;
 }
 
@@ -37,21 +43,21 @@
   animation: dot-light 520ms var(--ease-out) both;
 }
 
-/* נדלקות אחת אחרי השנייה אחרי שהמסך מתיישב (visual-in מסתיים ב-1500ms) —
+/* נדלקות אחת אחרי השנייה אחרי שהמסך מתיישב (הסיבוב מסתיים ב-1900ms) —
    כמו מחשב שמתחיל לעבוד. גוונים אמיתיים של דפדפן/חלון (אדום/ענבר/ירוק). */
 .dot1 {
   --dot-color: #ff5f57;
-  animation-delay: 1550ms;
+  animation-delay: 1950ms;
 }
 
 .dot2 {
   --dot-color: #febc2e;
-  animation-delay: 1750ms;
+  animation-delay: 2150ms;
 }
 
 .dot3 {
   --dot-color: #28c840;
-  animation-delay: 1950ms;
+  animation-delay: 2350ms;
 }
 
 .addressBar {
@@ -87,14 +93,25 @@
   fill: var(--bg-raised-2);
 }
 
-@keyframes visual-in {
-  from {
-    opacity: 0;
-    transform: rotateY(-14deg) rotateX(-6deg) scale(0.78) translateY(30px) translateX(-36px);
+@keyframes visual-in-opacity {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* עד 78% הסיבוב עצמו בקצב אחיד; אחר כך "קפיצה" קטנה מעבר למצב הסופי
+   וחזרה אליו — תחושה של נחיתה במקום, לא רק עצירה חלקה. */
+@keyframes visual-in-transform {
+  0% {
+    transform: rotateY(-85deg) rotateX(-10deg) scale(0.8) translateY(24px);
   }
-  to {
-    opacity: 1;
-    transform: rotateY(16deg) rotateX(5deg) rotateZ(-2deg) scale(1) translateY(0) translateX(0);
+  78% {
+    transform: rotateY(16deg) rotateX(5deg) rotateZ(-2deg) scale(1) translateY(0);
+  }
+  90% {
+    transform: rotateY(21deg) rotateX(7deg) rotateZ(-3deg) scale(1.025) translateY(-4px);
+  }
+  100% {
+    transform: rotateY(16deg) rotateX(5deg) rotateZ(-2deg) scale(1) translateY(0);
   }
 }
 
@@ -103,7 +120,7 @@
     max-width: 28rem;
   }
   .svg {
-    animation-name: visual-in-mobile;
+    animation-name: visual-in-opacity, visual-in-transform-mobile;
   }
 }
 
@@ -125,13 +142,17 @@
   }
 }
 
-@keyframes visual-in-mobile {
-  from {
-    opacity: 0;
-    transform: scale(0.8) translateY(26px);
+@keyframes visual-in-transform-mobile {
+  0% {
+    transform: rotateY(-70deg) scale(0.8) translateY(20px);
   }
-  to {
-    opacity: 1;
+  78% {
+    transform: rotateY(8deg) rotateX(3deg) scale(1) translateY(0);
+  }
+  90% {
+    transform: rotateY(12deg) rotateX(4.5deg) scale(1.02) translateY(-3px);
+  }
+  100% {
     transform: rotateY(8deg) rotateX(3deg) scale(1) translateY(0);
   }
 }

@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { isSafeUrl } from '../../../utils/sanitize';
 import { Button } from '../../ui/Button';
-import { useInView } from '../../../hooks/useInView';
+import { useInViewToggle } from '../../../hooks/useInViewToggle';
 import { cn } from '../../../utils/cn';
 import styles from './ProjectsSection.module.css';
 
@@ -14,15 +14,13 @@ const ROTATE_MS = 3800;
  */
 export function ProjectCard({ project }) {
   const { name, title, summary, tag, link, images, detail } = project;
-  const [ref, inView] = useInView({ threshold: 0.2 });
+  const [ref, inView] = useInViewToggle({ threshold: 0.2 });
   const [active, setActive] = useState(0);
   const [brokenSet, setBrokenSet] = useState(() => new Set());
-  const hovering = useRef(false);
 
   useEffect(() => {
     if (images.length < 2) return undefined;
     const timer = setInterval(() => {
-      if (hovering.current) return;
       setActive((i) => (i + 1) % images.length);
     }, ROTATE_MS);
     return () => clearInterval(timer);
@@ -35,12 +33,7 @@ export function ProjectCard({ project }) {
 
   return (
     <article ref={ref} className={cn(styles.showcase, inView && styles.showcaseIn)}>
-      <div
-        className={styles.visual}
-        aria-hidden="true"
-        onMouseEnter={() => { hovering.current = true; }}
-        onMouseLeave={() => { hovering.current = false; }}
-      >
+      <div className={styles.visual} aria-hidden="true">
         <div className={styles.scrollPanel}>
           <div className={styles.scrollFrame}>
             {images.map((src, i) =>

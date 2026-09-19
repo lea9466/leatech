@@ -3,7 +3,7 @@ import { HeroSection } from './components/sections/HeroSection';
 import { AboutSection } from './components/sections/AboutSection';
 import { ServicesSection } from './components/sections/ServicesSection';
 import { ProjectsSection } from './components/sections/ProjectsSection';
-// import { ContactSection } from './components/sections/ContactSection';
+import { ContactSection } from './components/sections/ContactSection';
 
 /**
  * App מרכיב את הדף: Layout קבוע (הדר + פוטר),
@@ -21,7 +21,7 @@ export default function App() {
       <AboutSection />
       <ServicesSection />
       <ProjectsSection />
-      {/* <ContactSection /> */}
+      <ContactSection />
     </Layout>
   );
 }
