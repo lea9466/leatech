@@ -65,7 +65,7 @@ const STEPS = [
   { id: 'name', kind: 'text', autoComplete: 'name', prompt: () => 'היי! מה השם שלך?' },
   { id: 'email', kind: 'email', autoComplete: 'email', prompt: (v) => `נעים להכיר, ${v.name}! מה כתובת המייל שלך?` },
   { id: 'projectType', kind: 'chips', prompt: () => 'מעולה. על איזה סוג פרויקט מדובר?' },
-  { id: 'message', kind: 'textarea', prompt: () => 'ספרי לי עוד — מה קורה היום, ומה היית רוצה שיקרה לבד?' },
+  { id: 'message', kind: 'textarea', prompt: () => 'ספרו לי עוד — מה קורה היום, ומה הייתם רוצים שיקרה לבד?' },
 ];
 
 const REVIEW_STEP = STEPS.length;
@@ -280,7 +280,7 @@ export function ContactSection() {
                         key={currentStep.id}
                         rows={2}
                         maxLength={FORM_LIMITS.messageMax}
-                        placeholder="הקלידי כאן…"
+                        placeholder="הקלידו כאן…"
                         onKeyDown={onKeyDownAdvance}
                         {...activeField}
                         ref={mergedFieldRef}
@@ -292,7 +292,7 @@ export function ContactSection() {
                         dir={currentStep.kind === 'email' ? 'ltr' : undefined}
                         autoComplete={currentStep.autoComplete}
                         maxLength={currentStep.id === 'name' ? FORM_LIMITS.nameMax : undefined}
-                        placeholder="הקלידי כאן…"
+                        placeholder="הקלידו כאן…"
                         onKeyDown={onKeyDownAdvance}
                         {...activeField}
                         ref={mergedFieldRef}

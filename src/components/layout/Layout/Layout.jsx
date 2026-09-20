@@ -8,7 +8,7 @@ import styles from './Layout.module.css';
 export function Layout({ children }) {
   return (
     <div className={styles.layout}>
-      <a href="#main-content" className={styles.skipLink}>דלג לתוכן</a>
+      <a href="#main-content" className={styles.skipLink}>דלגו לתוכן</a>
       <Navbar />
       <main id="main-content" className={styles.main} tabIndex={-1}>
         {children}
