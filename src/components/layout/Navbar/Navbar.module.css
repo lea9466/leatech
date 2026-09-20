@@ -51,7 +51,11 @@
   color: var(--color-text);
 }
 
-/* ---------- כפתור מובייל ---------- */
+/* ---------- כפתור ותפריט מובייל ---------- */
+.scrim {
+  display: none;
+}
+
 .toggle {
   display: none;
   place-items: center;
@@ -110,19 +114,40 @@
     display: grid;
   }
 
-  .links {
-    /* absolute ולא fixed: backdrop-filter על ההדר יוצר containing block */
+  /* absolute ולא fixed בשני האלמנטים: backdrop-filter על ההדר יוצר containing block */
+  .scrim {
+    display: block;
     position: absolute;
     inset-block-start: 100%;
     inset-inline: 0;
-    height: calc(100dvh - var(--navbar-height));
-    flex-direction: column;
-    gap: 0;
-    padding: var(--space-8) var(--page-padding-inline);
-    background: rgba(10, 17, 40, 0.98);
+    height: 100dvh;
+    background: rgba(4, 6, 10, 0.6);
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-0.5rem);
+    transition: opacity var(--duration) var(--ease-out), visibility var(--duration);
+  }
+
+  .scrimOpen {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .links {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: calc(100% + var(--space-2));
+    inset-inline: var(--page-padding-inline);
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    background: var(--bg-raised);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-0.5rem) scale(0.98);
+    transform-origin: top center;
     transition: opacity var(--duration) var(--ease-out),
       transform var(--duration) var(--ease-out),
       visibility var(--duration);
@@ -136,10 +161,30 @@
 
   .link {
     display: block;
-    padding-block: var(--space-4);
+    padding: var(--space-3) var(--space-4);
     font-family: var(--font-display);
-    font-size: var(--text-xl);
+    font-size: var(--text-lg);
     color: var(--color-text);
-    border-block-end: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+  }
+
+  .link:hover,
+  .link:focus-visible {
+    background: var(--bg-raised-2);
+    color: var(--color-glacier);
+  }
+
+  /* הפריט האחרון (יצירת קשר) כפעולה ראשית */
+  .links li:last-child {
+    margin-block-start: var(--space-2);
+  }
+
+  .links li:last-child .link,
+  .links li:last-child .link:hover,
+  .links li:last-child .link:focus-visible {
+    background: var(--gradient-accent);
+    color: var(--on-accent);
+    font-weight: 700;
+    text-align: center;
   }
 }

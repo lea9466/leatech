@@ -62,6 +62,13 @@ export function Navbar() {
           ))}
         </ul>
       </nav>
+
+      {/* לחיצה מחוץ לתפריט סוגרת אותו (מובייל בלבד) */}
+      <div
+        className={cn(styles.scrim, isMenuOpen && styles.scrimOpen)}
+        onClick={closeMenu}
+        aria-hidden="true"
+      />
     </header>
   );
 }
