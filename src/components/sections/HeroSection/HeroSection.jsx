@@ -19,7 +19,7 @@ export function HeroSection() {
           </span>
 
           <h1 id={HEADING_ID} className={styles.title}>
-            <span className={styles.titleLine}>{headline}</span>
+            <span className={styles.titleLine}>{headline}</span>{' '}
             <span className={styles.titleAccent}>{headlineAccent}</span>
           </h1>
 

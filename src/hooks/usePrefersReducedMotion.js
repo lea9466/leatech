@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 const QUERY = '(prefers-reduced-motion: reduce)';
 
 export function usePrefersReducedMotion() {
-  const [prefersReduced, setPrefersReduced] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia(QUERY).matches
-  );
+  // false גם בדפדפן בהתחלה: כך הרינדור הראשון זהה ל-HTML שרונדר מראש (hydration),
+  // והערך האמיתי נקבע מיד אחר כך באפקט
+  const [prefersReduced, setPrefersReduced] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(QUERY);
+    setPrefersReduced(mediaQuery.matches);
     const handleChange = (event) => setPrefersReduced(event.matches);
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);

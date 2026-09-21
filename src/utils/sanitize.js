@@ -16,10 +16,13 @@ export const sanitizeText = (value = '') =>
     .replace(ANGLE_BRACKETS, '')
     .trim();
 
+/** בסיס קבוע לכתובות יחסיות – כך התוצאה זהה בשרת (prerender) ובדפדפן */
+const URL_BASE = 'https://leatech.dev';
+
 /** מחזיר true רק לכתובות https/mailto תקינות – חוסם javascript: ודומיו */
 export const isSafeUrl = (url) => {
   try {
-    const { protocol } = new URL(url, window.location.origin);
+    const { protocol } = new URL(url, URL_BASE);
     return protocol === 'https:' || protocol === 'mailto:';
   } catch {
     return false;
